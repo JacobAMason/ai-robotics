@@ -10,10 +10,9 @@ window
 
 define block model
 (
-  size [0.5 0.5 0.5]
-  gui_nose 0
+    size [0.5 0.5 0.5]
+    gui_nose 0
 )
-
 
 define map model
 (
@@ -31,7 +30,7 @@ define map model
 
 map
 (
-  name "blank_map"
+  name "empty_map"
   size [15 15 0.5]
   pose [0 0 0 0]
   bitmap "blank.png"
@@ -49,7 +48,6 @@ define hokuyo ranger
   ctrl "lasernoise"
 )
 
-
 define turtlebot position
 (
  # localisation "odom"
@@ -63,5 +61,5 @@ define turtlebot position
   
 )
 
-turtlebot( pose [-6 -6 0 0] color "red")
-block( pose [6 6 5 0] color "green")
+turtlebot( pose [0 0 0 0] color "red")
+block( pose [-6 6 5 0] color "green") 

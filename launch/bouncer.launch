@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="stage_ros" type="stageros" name="stageros" args="$(find ai_lectures)/world/obstacles.world" respawn="false" output="screen" />
+	<node name="pe3" pkg="ai_lectures" type="bouncer.py" output="screen" />
+</launch>

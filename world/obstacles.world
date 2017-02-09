@@ -14,7 +14,6 @@ define block model
   gui_nose 0
 )
 
-
 define map model
 (
   color "gray30"
@@ -31,10 +30,10 @@ define map model
 
 map
 (
-  name "blank_map"
+  name "obstacles_map"
   size [15 15 0.5]
   pose [0 0 0 0]
-  bitmap "blank.png"
+  bitmap "obstacles.png"
 )
 
 define hokuyo ranger
@@ -63,5 +62,4 @@ define turtlebot position
   
 )
 
-turtlebot( pose [-6 -6 0 0] color "red")
-block( pose [6 6 5 0] color "green")
+turtlebot( pose [-6 6 0 0] color "red")
