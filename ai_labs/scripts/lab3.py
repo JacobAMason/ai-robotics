@@ -82,9 +82,9 @@ class NoWallsVisible(RobotState):
             robot.state = NoWallsVisible(robot)
         elif front_distance == -1:
             robot.state = WallToSide(robot)
-        elif wall_distance == -1:
+        elif wall_distance == -1 and front_distance < 0.4:
             robot.state = WallInFront(robot)
-        else:
+        elif front_distance < 0.4:
             robot.state = WallsInFrontAndSide(robot)
         return self.command
 
@@ -92,21 +92,32 @@ class RoundingCorner(RobotState):
     def __init__(self, robot):
         super(RoundingCorner, self).__init__(robot)
         self.command = Twist()
-        self.command.linear.x = 0.1
-        self.command.angular.z = -1.0
+
+        self.isCornerBetweenSensors = False
 
     def get_cmd_vel(self, front_distance, wall_distance):
         if front_distance == -1 and wall_distance == -1:
-            robot.state = RoundingCorner(robot)
-        elif front_distance == -1:
             pass
-            # robot.state = WallToSide(robot)
+            # robot.state = RoundingCorner(robot)
+        elif front_distance == -1:
+            robot.state = WallToSide(robot)
+        elif front_distance < 0.3:
+            self.isCornerBetweenSensors = True
+            self.command.angular.z = 1.0
+            self.command.linear.x = -0.1
         elif wall_distance == -1:
             robot.state = WallInFront(robot)
         else:
             # Disallow this state transition
             # robot.state = WallsInFrontAndSide(robot)
             pass
+
+        if self.isCornerBetweenSensors:
+            self.command.angular.z = 1.0
+            self.command.linear.x = -0.1
+        else:
+            self.command.linear.x = 0.1
+            self.command.angular.z = -0.5
         return self.command
 
 class WallInFront(RobotState):
@@ -124,7 +135,7 @@ class WallInFront(RobotState):
         else:
             robot.state = WallsInFrontAndSide(robot)
         self.command.angular.z = (1 - front_distance)
-        self.command.linear.x = 0.7 * front_distance
+        self.command.linear.x = 0.2 * front_distance
         return self.command
 
 class WallToSide(RobotState):
@@ -133,17 +144,20 @@ class WallToSide(RobotState):
         self.command = Twist()
 
     def get_cmd_vel(self, front_distance, wall_distance):
-        if front_distance == -1 and wall_distance == -1:
+        if wall_distance == -1 or wall_distance > 0.5:
             robot.state = RoundingCorner(robot)
         elif front_distance == -1:
             robot.state = WallToSide(robot)
-        elif wall_distance == -1:
-            robot.state = WallInFront(robot)
-        elif front_distance < 0.5:
+        elif wall_distance == -1 or wall_distance > 0.5:
+            robot.state = RoundingCorner(robot)
+        elif front_distance < 0.4:
             robot.state = WallsInFrontAndSide(robot)
 
-        self.command.angular.z = -math.copysign(9*(wall_distance-0.3)**2, wall_distance-0.3)
-        self.command.linear.x = 0.7 * (1 - min(1, abs(self.command.angular.z)))
+        self.command.linear.x = 0.2
+        if wall_distance < 0.3:
+            self.command.angular.z = .2
+        else:
+            self.command.angular.z = -.2
         return self.command
 
 class WallsInFrontAndSide(RobotState):
@@ -161,10 +175,7 @@ class WallsInFrontAndSide(RobotState):
         else:
             robot.state = WallsInFrontAndSide(robot)
         self.command.angular.z = 1.0
-        if front_distance > 0.2:
-            self.command.linear.x = front_distance-0.2
-        else:
-            self.command.linear.x = 0
+        self.command.linear.x = 0
         return self.command
 
         
