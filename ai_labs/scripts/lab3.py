@@ -180,7 +180,7 @@ class WallsInFrontAndSide(RobotState):
 
         
 if __name__ == '__main__':
-    rospy.init_node('lab3', anonymous=True, log_level=rospy.DEBUG) #Initialize the ros node
+    rospy.init_node('lab3', anonymous=True, log_level=rospy.INFO) #Initialize the ros node
     pub = rospy.Publisher('cmd_vel', Twist) #Create our publisher to send drive commands to the robot
     rospy.Subscriber("base_scan", LaserScan, laserCallback) #Subscribe to the laser scan topic
 
