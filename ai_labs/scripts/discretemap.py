@@ -348,20 +348,20 @@ class DiscreteMap():
             draw.ellipse((p[0]-2,p[1]-2,p[0]+2,p[1]+2),fill=color)
             draw.line([p,(p[0] + math.cos(particles[i].theta) * d,p[1] - math.sin(particles[i].theta)*d)],fill=color,width =1)
             
-        #Plot out the robot's actual location on the image (in blue)
-        # d = 10
-        # r = self.map_to_image((robot[0],robot[1]))
-        # draw.ellipse((r[0]-5,r[1]-5,r[0]+5,r[1]+5),fill='Blue')
-        # cur_angle = laser_data.angle_min
-        #
-        #Plot out the current laser scan on the image (in blue)
-        # for j in range(len(laser_data.ranges)):
-        #     d2 = int(laser_data.ranges[j] * self.image_height / self.map_height)
-        #     draw.line([(r[0],r[1]),(r[0]+math.cos(robot[2] + cur_angle)*d2, r[1]-math.sin(robot[2]+cur_angle)*d2)],fill='Blue',width=1)
-        #     cur_angle = cur_angle + laser_data.angle_increment
-        #
-        # d = 10
-        # draw.line([(r[0],r[1]),(r[0]+math.cos(robot[2])*d, r[1]-math.sin(robot[2])*d)],fill='Black',width=3)
+        # Plot out the robot's actual location on the image (in blue)
+        d = 10
+        r = self.map_to_image((robot[0],robot[1]))
+        draw.ellipse((r[0]-5,r[1]-5,r[0]+5,r[1]+5),fill='Blue')
+        cur_angle = laser_data.angle_min
+
+        # Plot out the current laser scan on the image (in blue)
+        for j in range(len(laser_data.ranges)):
+            d2 = int(laser_data.ranges[j] * self.image_height / self.map_height)
+            draw.line([(r[0],r[1]),(r[0]+math.cos(robot[2] + cur_angle)*d2, r[1]-math.sin(robot[2]+cur_angle)*d2)],fill='Blue',width=1)
+            cur_angle = cur_angle + laser_data.angle_increment
+
+        d = 10
+        draw.line([(r[0],r[1]),(r[0]+math.cos(robot[2])*d, r[1]-math.sin(robot[2])*d)],fill='Black',width=3)
 
         #Save the image
         display_im.save(sname)

@@ -148,16 +148,18 @@ class WallToSide(RobotState):
             robot.state = RoundingCorner(robot)
         elif front_distance == -1:
             robot.state = WallToSide(robot)
-        elif wall_distance == -1 or wall_distance > 0.5:
-            robot.state = RoundingCorner(robot)
         elif front_distance < 0.4:
             robot.state = WallsInFrontAndSide(robot)
 
         self.command.linear.x = 0.2
         if wall_distance < 0.3:
             self.command.angular.z = .2
+        elif wall_distance < 0.1:
+            self.command.linear.x = -0.1
+            self.command.angular.z = -0.1
         else:
-            self.command.angular.z = -.2
+            self.command.angular.z = -.1
+        rospy.logdebug(self.command.angular.z)
         return self.command
 
 class WallsInFrontAndSide(RobotState):
@@ -180,7 +182,7 @@ class WallsInFrontAndSide(RobotState):
 
         
 if __name__ == '__main__':
-    rospy.init_node('lab3', anonymous=True, log_level=rospy.INFO) #Initialize the ros node
+    rospy.init_node('lab3', anonymous=True, log_level=rospy.DEBUG) #Initialize the ros node
     pub = rospy.Publisher('cmd_vel', Twist) #Create our publisher to send drive commands to the robot
     rospy.Subscriber("base_scan", LaserScan, laserCallback) #Subscribe to the laser scan topic
 
