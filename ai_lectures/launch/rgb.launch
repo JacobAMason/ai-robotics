@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="stage_ros" type="stageros" name="stageros" args="$(find ai_lectures)/world/rgb.world" respawn="false" output="screen" />
+	<node name="rgb" pkg="ai_lectures" type="rgb_sol.py" output="screen" />
+</launch>
